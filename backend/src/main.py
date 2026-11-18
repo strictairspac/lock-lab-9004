@@ -2,20 +2,24 @@ import os,logging
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from sqlalchemy import text
-from src.config.database import Base,engine
+from src.config.database import Base,engine,Session
 from src.models import entities
 from src.controllers.auth import router as auth
 from src.routes import samples,transfers,trials,audit
 from src.middlewares.errors import ErrorMiddleware
 from src.middlewares.request_id import RequestIdMiddleware
+from src.services import quantity
 @asynccontextmanager
 async def lifespan(app):
     Base.metadata.create_all(engine)
+    quantity.ensure_schema(engine)
     if os.getenv('SEED_DEMO','true')=='true':
         try:
             from scripts.seed_demo import seed
             seed()
         except Exception: logging.exception('seed failed; manual retry is available')
+    with Session() as db:
+        quantity.bootstrap_baselines(db)
     yield
 app=FastAPI(title='实验样本流转并发台',lifespan=lifespan)
 app.add_middleware(ErrorMiddleware);app.add_middleware(RequestIdMiddleware)

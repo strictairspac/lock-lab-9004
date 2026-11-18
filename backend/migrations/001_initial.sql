@@ -1,5 +1,10 @@
 -- Schema is applied idempotently by SQLAlchemy metadata at startup.
 -- See src/models/entities.py for authoritative tables, constraints and relationships.
+-- Existing installations get the incremental columns from src/services/quantity.py:ensure_schema:
+--   ALTER TABLE samples ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ;
+--   ALTER TABLE transfers ADD COLUMN IF NOT EXISTS approved_quantity INTEGER;
+--   ALTER TABLE transfers ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ;
+-- sample_quantity_records (baseline / change / backfill) is created by metadata create_all.
 -- Critical locking query (worker only):
 -- SELECT remaining FROM trial_balances WHERE trial_id = :id FOR UPDATE;
 -- SET LOCAL lock_timeout = '250ms';

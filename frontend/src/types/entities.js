@@ -1,2 +1,2 @@
-/** Sample:{id,code,title,quantity,location}; Transfer:{id,code,sample_id,destination,quantity,note}; Trial:{id,name,transfer_id,timeout_ms,status,result,error} */
+/** Sample:{id,code,title,quantity,location,created_at}; Transfer:{id,code,sample_id,destination,quantity,note,approved_quantity,created_at,approved_quantity_known,registered_quantity,registered_quantity_source,restored_matches_approved}; SampleQuantityRecord:{id,sample_id,quantity,effective_at,kind,backfill_code,note,actor,created_at}; Trial:{id,name,transfer_id,timeout_ms,status,result,error} */
 export const entityNames=['samples','transfers','trials'];

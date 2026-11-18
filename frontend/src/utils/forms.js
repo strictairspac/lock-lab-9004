@@ -1,1 +1,1 @@
-export function formValues(form, numbers=[]){const values=Object.fromEntries(new FormData(form));for(const key of numbers)values[key]=Number(values[key]);return values;}
+export function formValues(form, numbers=[]){const values=Object.fromEntries(new FormData(form));for(const key of numbers)if(values[key]!==undefined&&values[key]!=='')values[key]=Number(values[key]);return values;}
